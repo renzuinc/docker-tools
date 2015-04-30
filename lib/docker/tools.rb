@@ -14,7 +14,9 @@ module Docker
   # A set of helpers for Rake-driven projects, aimed especially at streamlining
   # Docker workflows.
   module Tools
-    def self.init!
+    # Initialize `docker-tools`.  Configures Rake, and loads some handy tasks.
+    def self.init!(private_registry = nil)
+      @private_registry = private_registry
       # Pare this to CPU count, or possibly half that because hyperthreading
       # usually is not our freind.
       ::Rake.application.options.thread_pool_size ||= 4
@@ -24,7 +26,7 @@ module Docker
       FileList["#{task_dir}/**/*.rake"].each { |fname| load fname }
     end
 
-    def self.registry;  fail "Must override with your own registry URL!"; end
+    def self.registry;  @private_registry; end
     def self.container; container_version_info.first; end
     def self.version;   container_version_info.last; end
     def self.full_name; container_version_info.join(":"); end
