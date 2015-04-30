@@ -22,9 +22,6 @@ Style/DoubleNegation:
 # Style/DotPosition:
 #   EnforcedStyle: trailing
 
-# Style/Documentation:
-#   Enabled: false
-
 Style/EmptyLineBetweenDefs:
   AllowAdjacentOneLineDefs: true
 
@@ -45,9 +42,8 @@ Style/LineEndConcatenation:
 # Style/RegexpLiteral:
 #   MaxSlashes: 0
 
-# Eh, I use this pattern a bit much to clean it up right now.
-Style/RescueModifier:
-  Enabled: false
+# Style/RescueModifier:
+#   Enabled: false
 
 # We like terse methods.
 Style/SingleLineMethods:
