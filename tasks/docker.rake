@@ -18,12 +18,10 @@ namespace :docker do
     sh %(docker push #{force_push}#{remote_name})
   end
 
-  if File.exist?("docker-compose.yml")
-    desc "Run the most recently built Docker container."
-    task :run do
-      sh %(docker-compose kill)
-      sh %(docker-compose rm --force)
-      sh %(docker-compose up)
-    end
+  desc "Generate `VERSION` `Dockerfile`, `docker-compose.yml`, etc.  Specify"\
+    " TEMPLATE, or omit for a list of available options."
+  task :init do
+    # TODO: Generate above-listed files.
+    # TODO: Test to see if `docker-compose` is in path, kvetch if not.
   end
 end

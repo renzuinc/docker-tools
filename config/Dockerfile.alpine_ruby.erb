@@ -1,0 +1,29 @@
+FROM alpine:3.1
+MAINTAINER <%= maintainer %>
+
+# Add in the data Bundler needs to install our dependencies for us.
+ADD Gemfile* /opt/<%= project %>/
+
+# Now, install everything we'll need for Bundler to do its thing, then have it
+# do its thing.  Remove dev deps afterwards to keep the container svelte.
+#
+# NOTE: When adding any sort of `-dev` dependency here, include both dev and
+# NOTE: non-dev versions, then explicitly remove the dev version below!
+WORKDIR /opt/<%= project %>/
+<%
+dev_deps = %w(ruby-dev build-base libffi-dev libxml2-dev libxslt-dev openssl-dev)
+-%>
+RUN apk update && \
+  apk add ruby ruby-bundler \
+    ca-certificates libffi libxml2 libxslt openssl ruby-io-console ruby-bigdecimal libstdc++ \
+    <%= dev_deps.join(" ") %> && \
+  export PATH="$PATH:$(gem environment gemdir)/bin" && \
+  bundle config build.nokogiri --use-system-libraries && \
+  bundle install --deployment --without development test --jobs 4 && \
+  apk del --purge <%= dev_deps.join(" ") %>
+ADD . /opt/<%= project %>/
+
+# Don't let rb-readline get confused:
+ENV TERM dumb
+
+CMD ["bin/run"]

@@ -7,4 +7,4 @@ AllCops:
   # Exclude:
   #   - tmp/**/*
 
-inherit_from: config/rubocop.yml
+inherit_from: config/rubocop_rules.yml
