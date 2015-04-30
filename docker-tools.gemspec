@@ -1,14 +1,14 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'docker/tools/version'
+require "docker/tools/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "docker-tools"
   spec.version       = Docker::Tools::VERSION
   spec.authors       = ["Jon Frisby"]
   spec.email         = ["jfrisby@mrjoy.com"]
-  spec.summary       = %q{Shared tools for Rake and Docker workflows.}
+  spec.summary       = "Shared tools for Rake and Docker workflows."
   spec.homepage      = ""
   spec.license       = "MIT"
 

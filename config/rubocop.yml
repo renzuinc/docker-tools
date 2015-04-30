@@ -42,8 +42,8 @@ Style/LineEndConcatenation:
   Enabled: false
 
 # TODO: *sigh*  See: https://github.com/bbatsov/rubocop/issues/1020
-Style/RegexpLiteral:
-  MaxSlashes: 0
+# Style/RegexpLiteral:
+#   MaxSlashes: 0
 
 # Eh, I use this pattern a bit much to clean it up right now.
 Style/RescueModifier:

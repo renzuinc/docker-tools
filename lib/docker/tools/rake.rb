@@ -1,7 +1,7 @@
 module Docker
   module Tools
     # Rake helper methods.
-    class Rake
+    module Rake
       # Create and manage a temp file, replacing `fname` if `fname` is provided.
       def with_tempfile(fname = nil, &block)
         Tempfile.open("tmp") do |f|
@@ -21,7 +21,7 @@ module Docker
       # `namespace`.
       def parent_task(name)
         task name do
-          sub_tasks = Rake::Task
+          sub_tasks = ::Rake::Task
                       .tasks
                       .select { |t| t.name =~ /^#{name}:/ }
                       .sort { |a, b| a.name <=> b.name }

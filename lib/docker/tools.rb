@@ -8,12 +8,14 @@ require "docker/monkey_patches"
 require "docker/tools/version"
 require "docker/tools/rake"
 
+include Docker::Tools::Rake
+
 module Docker
   module Tools
     def self.init!
       # Pare this to CPU count, or possibly half that because hyperthreading
       # usually is not our freind.
-      Rake.application.options.thread_pool_size ||= 4
+      ::Rake.application.options.thread_pool_size ||= 4
       # Time.zone = 'America/Los_Angeles'
 
       task_dir = File.expand_path("../../../tasks", __FILE__)
