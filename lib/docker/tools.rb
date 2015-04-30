@@ -11,6 +11,8 @@ require "docker/tools/rake"
 include Docker::Tools::Rake
 
 module Docker
+  # A set of helpers for Rake-driven projects, aimed especially at streamlining
+  # Docker workflows.
   module Tools
     def self.init!
       # Pare this to CPU count, or possibly half that because hyperthreading
