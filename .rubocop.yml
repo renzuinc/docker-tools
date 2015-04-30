@@ -1,0 +1,10 @@
+AllCops:
+  Include:
+    - '**/Gemfile'
+    - '**/Rakefile'
+    - '**/*.rake'
+    - '**/*.gemspec'
+  # Exclude:
+  #   - tmp/**/*
+
+inherit_from: config/rubocop.yml
