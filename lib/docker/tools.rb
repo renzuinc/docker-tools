@@ -1,5 +1,6 @@
 require "pathname"
 require "shellwords"
+require "erb"
 
 require "rake/clean"
 require "active_support/all"
