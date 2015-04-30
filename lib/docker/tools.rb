@@ -25,6 +25,8 @@ module Docker
 
       task_dir = File.expand_path("../../../tasks", __FILE__)
       FileList["#{task_dir}/**/*.rake"].each { |fname| load fname }
+
+      FileList["tasks/**/*.rake"].each { |fname| load fname }
     end
 
     def self.registry;  @private_registry; end
