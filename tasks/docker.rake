@@ -74,8 +74,8 @@ namespace :docker do
     sh %(docker push #{force_push}#{remote_name})
   end
 
-  desc "Generate `VERSION` `Dockerfile`, `docker-compose.yml`, etc.  Specify"\
-    " TEMPLATE, or omit for a list of available options."
+  # desc "Generate `VERSION` `Dockerfile`, `docker-compose.yml`, etc.  Specify"\
+  #   " TEMPLATE, or omit for a list of available options."
   task :init do
     tools     = Docker::Tools::Templating.new
     template  = ENV["TEMPLATE"]
