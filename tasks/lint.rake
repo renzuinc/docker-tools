@@ -36,7 +36,12 @@ namespace :lint do
     end
   end
 
-  # TODO: maybe also include `bundle outdated` as a lint?
+  desc "Check for outdated gems."
+  task :bundler do
+    # Don't error-out if this fails, since we may not be able to update some
+    # deps.
+    sh "bundle outdated || true"
+  end
 end
 
 desc "Run all lint checks against the code."
