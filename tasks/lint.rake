@@ -28,6 +28,14 @@ namespace :lint do
     end
   end
 
+  have_cloc = `which cloc`.strip != ""
+  if have_cloc
+    desc "Show LOC metrics for project using cloc."
+    task :cloc do
+      sh "cloc . --exclude-dir=notes,secrets,coverage,.bundle,tmp"
+    end
+  end
+
   # TODO: maybe also include `bundle outdated` as a lint?
 end
 
