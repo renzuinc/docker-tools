@@ -1,8 +1,17 @@
 Metrics/LineLength:
   Max: 80
 
+Metrics/MethodLength:
+  Exclude:
+  - 'db/migrate/*'
+
 Style/AccessModifierIndentation:
   EnforcedStyle: outdent
+
+Style/AlignHash:
+  EnforcedColonStyle: table
+  # TODO: Err, maybe keys here?
+  EnforcedLastArgumentHashStyle: ignore_implicit
 
 Style/CollectionMethods:
   PreferredMethods:
@@ -14,6 +23,13 @@ Style/CollectionMethods:
 # Allow comments to be aligned to one another.
 Style/CommentIndentation:
   Enabled: false
+
+# Don't bother with class documentation for Rails application class, and DB
+# migrations.
+Style/Documentation:
+  Exclude:
+  - 'db/migrate/*'
+  - 'config/application.rb'
 
 # We like the truthiness operator.
 Style/DoubleNegation:
