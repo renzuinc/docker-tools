@@ -18,11 +18,12 @@ module Docker
     # Initialize `docker-tools`.  Configures Rake, and loads some handy tasks.
     def self.init!(private_registry = nil)
       @private_registry = private_registry
-      # Pare this to CPU count, or possibly half that because hyperthreading
-      # usually is not our freind.
+      # TODO: Pare this to CPU count, or possibly half that because
+      # hyperthreading usually is not our friend.
       ::Rake.application.options.thread_pool_size ||= 4
       # Time.zone = 'America/Los_Angeles'
 
+      # TODO: Look for `lib/tasks` and use that if it exists...
       task_dir = File.expand_path("../../../tasks", __FILE__)
       FileList["#{task_dir}/**/*.rake"].each { |fname| load fname }
 

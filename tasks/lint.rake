@@ -42,6 +42,8 @@ namespace :lint do
     # deps.
     sh "bundle outdated || true"
   end
+
+  # TODO: Add Rubocop task if the Rubocop gem is available.
 end
 
 desc "Run all lint checks against the code."
