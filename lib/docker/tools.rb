@@ -23,11 +23,10 @@ module Docker
       ::Rake.application.options.thread_pool_size ||= 4
       # Time.zone = 'America/Los_Angeles'
 
-      # TODO: Look for `lib/tasks` and use that if it exists...
       task_dir = File.expand_path("../../../tasks", __FILE__)
-      FileList["#{task_dir}/**/*.rake"].each { |fname| load fname }
-
-      FileList["tasks/**/*.rake"].each { |fname| load fname }
+      task_files = FileList["#{task_dir}/**/*.rake"] +
+                   FileList["tasks/**/*.rake"]
+      task_files.sort.uniq.each { |fname| load fname }
     end
 
     def self.registry;  @private_registry; end
