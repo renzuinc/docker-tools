@@ -23,9 +23,9 @@ module Docker
       ::Rake.application.options.thread_pool_size ||= 4
       # Time.zone = 'America/Los_Angeles'
 
-      task_dir = File.expand_path("../../../tasks", __FILE__)
-      task_files = FileList["#{task_dir}/**/*.rake"] +
-                   FileList["tasks/**/*.rake"]
+      task_dir    = File.expand_path("../../../tasks", __FILE__)
+      task_files  = FileList["#{task_dir}/**/*.rake"] +
+                    FileList["tasks/**/*.rake"]
       task_files.sort.uniq.each { |fname| load fname }
     end
 
