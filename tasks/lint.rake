@@ -10,7 +10,7 @@ namespace :lint do
                       "# AUTO-GENERATED FILE!  DO NOT EDIT DIRECTLY!\n"\
                       "\n"\
                       "# Override from `.rubocop.local.yml` and run `rake"\
-                        " lint` again, instead!\n"
+                        " lint:rubocop` again, instead!\n"
     # TODO: Merge `AllCops` more intelligently?
     results       = (heading + defaults.merge(overrides).to_yaml).rstrip
     write_file(".rubocop.yml", [results])

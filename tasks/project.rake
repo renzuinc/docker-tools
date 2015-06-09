@@ -1,5 +1,6 @@
 namespace :project do
-  # desc "Generate `.rubocop.yml`, modify `Rakefile`, `.gitignore`, etc."\
+  # desc "Generate `.rubocop.local.yml`, `.dockerignore`, and also modify"\
+  #   " `Rakefile`, `.gitignore`, etc."\
   #   "  Specify TEMPLATE, or omit for a list of available options."
   task :init do
     # TODO: Generate `.rubocop.local.yml`, utilizing `.rubocop.yml` if it
