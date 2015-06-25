@@ -1,0 +1,9 @@
+* https://gitlab.com/coraline/fukuzatsu
+* https://gitlab.com/coraline/snuffle
+* https://gitlab.com/coraline/analyst ?
+* https://github.com/CoralineAda/society
+* https://github.com/CoralineAda/turbulence
+* https://github.com/CoralineAda/churn
+* https://github.com/CoralineAda/poro_plus
+* https://github.com/CoralineAda/faceted
+* https://github.com/CoralineAda/synack
