@@ -1,5 +1,14 @@
+Lint/FormatParameterMismatch:
+  Enabled: true
+
+# Lint/OptionHash:
+#   Enabled: true
+
 Metrics/LineLength:
   Max: 80
+
+Performance/StringReplacement:
+  Enabled: true
 
 Style/AccessModifierIndentation:
   EnforcedStyle: outdent
@@ -25,6 +34,9 @@ Style/DoubleNegation:
 Style/EmptyLineBetweenDefs:
   AllowAdjacentOneLineDefs: true
 
+Style/ExtraSpacing:
+  AllowForAlignment: true
+
 Style/FormatString:
   EnforcedStyle: 'String#%'
   SupportedStyles: 'String#%'
@@ -39,8 +51,11 @@ Style/LineEndConcatenation:
   Enabled: false
 
 # TODO: *sigh*  See: https://github.com/bbatsov/rubocop/issues/1020
-# Style/RegexpLiteral:
-#   MaxSlashes: 0
+Style/RegexpLiteral:
+  MaxSlashes: 0
+
+Style/RescueEnsureAlignment:
+  Enabled: true
 
 # Style/RescueModifier:
 #   Enabled: false
