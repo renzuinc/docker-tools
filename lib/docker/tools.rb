@@ -32,16 +32,6 @@ module Docker
     def self.full_name; container_version_info.join(":"); end
     def self.latest;    [container, "latest"].join(":"); end
 
-    def self.path
-      if File.exist?("Dockerfile")
-        "."
-      elsif File.exist?("context/Dockerfile")
-        "context"
-      else
-        nil
-      end
-    end
-
   protected
 
     def self.task_files
