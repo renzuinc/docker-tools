@@ -4,6 +4,7 @@ require "erb"
 
 require "rake/clean"
 require "active_support/all"
+require "nokogiri"
 
 require "docker/monkey_patches"
 require "docker/tools/version"
@@ -45,7 +46,17 @@ module Docker
     end
 
     def self.container_version_info
-      @container_version_info ||= File.read("VERSION").chomp.strip.split(/:/)
+      @container_version_info ||= begin
+        if File.exist?("VERSION")
+          File.read("VERSION").chomp.strip.split(/:/)
+        elsif File.exist?("pom.xml")
+          raw = Nokogiri.parse(File.read("pom.xml"))
+          [ raw.css("project > artifactId").first.text,
+            raw.css("project > version").first.text ]
+        else
+          fail "Couldn't find VERSION or pom.xml.  Giving up!"
+        end
+      end
     end
   end
 end
