@@ -18,15 +18,12 @@ module Docker
     # Initialize `docker-tools`.  Configures Rake, and loads some handy tasks.
     def self.init!(private_registry = nil)
       @private_registry = private_registry
-      # Pare this to CPU count, or possibly half that because hyperthreading
-      # usually is not our freind.
+      # TODO: Pare this to CPU count, or possibly half that because
+      # hyperthreading usually is not our friend.
       ::Rake.application.options.thread_pool_size ||= 4
       # Time.zone = 'America/Los_Angeles'
 
-      task_dir = File.expand_path("../../../tasks", __FILE__)
-      FileList["#{task_dir}/**/*.rake"].each { |fname| load fname }
-
-      FileList["tasks/**/*.rake"].each { |fname| load fname }
+      task_files.each { |fname| load fname }
     end
 
     def self.registry;  @private_registry; end
@@ -36,6 +33,16 @@ module Docker
     def self.latest;    [container, "latest"].join(":"); end
 
   protected
+
+    def self.task_files
+      task_dir        = File.expand_path("../../../tasks", __FILE__)
+      raw_task_files  = FileList["#{task_dir}/**/*.rake"] +
+                        FileList["tasks/**/*.rake"]
+      raw_task_files
+        .map { |fname| File.expand_path(fname) }
+        .sort
+        .uniq
+    end
 
     def self.container_version_info
       @container_version_info ||= File.read("VERSION").chomp.strip.split(/:/)
