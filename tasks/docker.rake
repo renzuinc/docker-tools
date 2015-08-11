@@ -21,6 +21,15 @@ namespace :docker do
     force_push  = (ENV["FORCE_PUSH"].to_i != 0) ? "-f " : ""
     remote_name = "#{Docker::Tools.registry}/#{Docker::Tools.full_name}"
     sh %(docker push #{force_push}#{remote_name})
-    # TODO: Update Dockerrun.aws.json if it exists...
+    if File.exist?("Dockerrun.aws.json")
+      puts "Updating Dockerrun.aws.json..."
+      raw = JSON.parse(File.read("Dockerrun.aws.json"))
+      raw["Image"] ||= {}
+      raw["Image"]["Name"] = remote_name
+      File.open("Dockerrun.aws.json", "w") do |fh|
+        fh.write(JSON.pretty_unparse(raw))
+        fh.write("\n")
+      end
+    end
   end
 end
