@@ -26,4 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "rubocop", "> 0"
   spec.add_runtime_dependency "pry", "> 0"
   spec.add_runtime_dependency "nokogiri", "> 0"
+  spec.add_runtime_dependency "dotenv", "> 0"
 end
