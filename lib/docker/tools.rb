@@ -9,6 +9,7 @@ require "nokogiri"
 require "docker/monkey_patches"
 require "docker/tools/version"
 require "docker/tools/rake"
+require "docker/tools/maven"
 
 include Docker::Tools::Rake
 
@@ -18,7 +19,7 @@ module Docker
   module Tools
     # Initialize `docker-tools`.  Configures Rake, and loads some handy tasks.
     def self.init!(private_registry = nil, internal_registry = nil)
-      @private_registry = private_registry
+      @private_registry   = private_registry
       @internal_registry  = internal_registry
       # TODO: Pare this to CPU count, or possibly half that because
       # hyperthreading usually is not our friend.
@@ -66,7 +67,7 @@ module Docker
     end
 
     def self.simple_version?; File.exist?("VERSION"); end
-    def self.pom_version?; File.exist?("pom.xml"); end
+    def self.pom_version?; Docker::Tools::Maven.in_use?; end
 
     def self.simple_version_info
       return nil unless simple_version?
@@ -75,14 +76,12 @@ module Docker
 
     def self.pom_version_info
       return nil unless pom_version?
-      raw = Nokogiri.parse(File.read("pom.xml"))
-      [raw.css("project > artifactId").first.text,
-       raw.css("project > version").first.text]
+      Docker::Tools::Maven.extract_version!
     end
 
     def self.set_simple_version!(version)
       File.open("VERSION", "w") do |fh|
-        fh.write([simple_version_info.first, version].join(":") + "\n")
+        fh.write([container, version].join(":") + "\n")
       end
     end
 
