@@ -1,3 +1,13 @@
+AllCops:
+  Exclude:
+    - bin/bundle
+    - bin/bundle-audit
+    - bin/rails
+    - bin/rake
+    - bin/spring
+    - db/schema.rb
+    - tmp/**/*
+
 Lint/FormatParameterMismatch:
   Enabled: true
 
