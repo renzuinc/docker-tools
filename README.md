@@ -8,7 +8,8 @@ A set of tools for Rake and Docker workflows, including local use of Docker Comp
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "docker-tools"
+gem "docker-tools", require: false,
+                    git: "git@github.com:MrJoy/docker-tools.git"
 ```
 
 And then execute:
@@ -28,23 +29,31 @@ TODO: Write usage instructions here
 
 1. In `Rakefile`, add this -- replacing the domain name with the URL of your private Docker registry:
     ```ruby
+    require "rubygems"
+    require "bundler/setup"
+    Bundler.require(:default, :development, :test)
+    Dotenv.load(".common.env", ".env")
+
     require "docker/tools"
 
-    Docker::Tools.init!("registry.myorganization.prod")
+    # The first path should allow `docker push`, with authentication.
+    # The second path should only allow `docker pull`, without authentication, and only from your private VPC.
+    Docker::Tools.init!("registry.myorg.com:5000", "registry.myorg.com:5000")
     ```
 1. Create a file named `.rubocop.local.yml` with your own Rubocop rules / configuration.
     * This will be merged with the saner defaults provided by `docker-tools` when running `rake lint:rubocop`.
-1. Initialize your project:
-    ```bash
-    rake project:init TEMPLATE=<some value>
-    ```
 
 ### Running The Tools
 
 ```bash
 rake lint # Run all `lint:*` tasks.  Includes `bundler-audit` and Rubocop by default.
 
-rake docker
+rake docker:build docker:tag docker:push
+
+# If you have a `docker-compose.yml` file:
+
+rake compose:kill compose:rm compose:up
+```
 
 ### Custom Lint Tasks
 
