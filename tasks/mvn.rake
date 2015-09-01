@@ -20,6 +20,7 @@ if Docker::Tools::Maven.in_use?
       sh "rsync -vcrlpgoD --del target/appassembler/ context/local"
       mv "context/local/repo/#{jar}", "context/local/#{jar}"
       ln_sf "../#{jar}", "context/local/repo/#{jar}"
+      cp_r "conf", "context/local/"
       # TODO: Can we suss this out from pom.xml?
       Docker::Tools::Maven.assets.each do |assets|
         cp_r assets, "context/local/"
