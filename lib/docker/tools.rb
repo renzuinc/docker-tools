@@ -5,6 +5,7 @@ require "erb"
 require "rake/clean"
 require "active_support/all"
 require "nokogiri"
+require "dotenv"
 
 require "docker/monkey_patches"
 require "docker/tools/version"
@@ -28,7 +29,7 @@ module Docker
       env_files = []
       env_files << ".common.env" if File.exist?(".common.env")
       env_files << ".env"
-      Dotenv.load(*env_files)
+      ::Dotenv.load(*env_files)
 
       task_files.each { |fname| load fname }
     end
