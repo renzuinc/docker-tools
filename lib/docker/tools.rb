@@ -25,6 +25,10 @@ module Docker
       # hyperthreading usually is not our friend.
       ::Rake.application.options.thread_pool_size ||= 4
       # Time.zone = 'America/Los_Angeles'
+      env_files = []
+      env_files << ".common.env" if File.exist?(".common.env")
+      env_files << ".env"
+      Dotenv.load(*env_files)
 
       task_files.each { |fname| load fname }
     end
