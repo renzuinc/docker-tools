@@ -21,9 +21,6 @@ namespace :lint do
     o_allcops["Exclude"] ||= d_allcops["Exclude"] if d_allcops.key?("Exclude")
     o_allcops["Include"] ||= d_allcops["Include"] if d_allcops.key?("Include")
 
-    puts defaults["AllCops"].inspect
-    puts overrides["AllCops"].inspect
-
     results = (RUBOCOP_HEADING + defaults.merge(overrides).to_yaml).rstrip
     write_file(".rubocop.yml", [results])
     sh "rubocop --display-cop-names"
