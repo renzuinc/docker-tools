@@ -35,12 +35,10 @@ namespace :lint do
     end
   end
 
-  have_cloc = `which cloc`.strip != ""
-  if have_cloc
-    desc "Show LOC metrics for project using cloc."
-    task :cloc do
-      sh "cloc . --exclude-dir=notes,secrets,coverage,.bundle,tmp"
-    end
+  desc "Show LOC metrics for project using cloc."
+  task :cloc do
+    # TODO: Make this list customizable.
+    sh "cloc . --exclude-dir=notes,secrets,coverage,.bundle,tmp"
   end
 
   desc "Check for outdated gems."
