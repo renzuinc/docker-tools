@@ -35,6 +35,16 @@ module Docker
     def self.full_name;         container_version_info.join(":"); end
     def self.latest;            [container, "latest"].join(":"); end
 
+    def self.set_version!(version)
+      if simple_version?
+        set_simple_version!(version)
+      elsif pom_version?
+        set_pom_version!(version)
+      else
+        fail "Couldn't find VERSION or pom.xml.  Giving up!"
+      end
+    end
+
   protected
 
     def self.task_files
@@ -55,16 +65,33 @@ module Docker
       end
     end
 
+    def self.simple_version?; File.exist?("VERSION"); end
+    def self.pom_version?; File.exist?("pom.xml"); end
+
     def self.simple_version_info
-      return nil unless File.exist?("VERSION")
+      return nil unless simple_version?
       File.read("VERSION").chomp.strip.split(/:/)
     end
 
     def self.pom_version_info
-      return nil unless File.exist?("pom.xml")
+      return nil unless pom_version?
       raw = Nokogiri.parse(File.read("pom.xml"))
       [raw.css("project > artifactId").first.text,
        raw.css("project > version").first.text]
+    end
+
+    def self.set_simple_version!(version)
+      File.open("VERSION", "w") do |fh|
+        fh.write([simple_version_info.first, version].join(":") + "\n")
+      end
+    end
+
+    def self.set_pom_version!(version)
+      raw = Nokogiri.parse(File.read("pom.xml"))
+      raw.css("project > version").first.text = version
+      File.open("pom.xml", "w") do |fh|
+        fh.write(raw.to_xml)
+      end
     end
   end
 end
