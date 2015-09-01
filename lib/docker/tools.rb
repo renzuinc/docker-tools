@@ -53,8 +53,8 @@ module Docker
           File.read("VERSION").chomp.strip.split(/:/)
         elsif File.exist?("pom.xml")
           raw = Nokogiri.parse(File.read("pom.xml"))
-          [ raw.css("project > artifactId").first.text,
-            raw.css("project > version").first.text ]
+          [raw.css("project > artifactId").first.text,
+           raw.css("project > version").first.text]
         else
           fail "Couldn't find VERSION or pom.xml.  Giving up!"
         end

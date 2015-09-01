@@ -1,3 +1,8 @@
+RUBOCOP_HEADING = "# #{('WARNING!  ' * 7).rstrip}\n"\
+                  "# AUTO-GENERATED FILE!  DO NOT EDIT DIRECTLY!\n"\
+                  "\n"\
+                  "# Override from `.rubocop.local.yml` and re-run `rake lint:rubocop` instead!\n"
+
 namespace :lint do
   desc "Run Rubocop against the codebase."
   task :rubocop do
@@ -7,13 +12,8 @@ namespace :lint do
     defaults      = YAML.load(File.read(defaults_file))
     local_opts    = ".rubocop.local.yml"
     overrides     = YAML.load(File.read(local_opts)) if File.exist?(local_opts)
-    heading       = "# #{('WARNING!  ' * 7).rstrip}\n"\
-                      "# AUTO-GENERATED FILE!  DO NOT EDIT DIRECTLY!\n"\
-                      "\n"\
-                      "# Override from `.rubocop.local.yml` and run `rake"\
-                        " lint:rubocop` again, instead!\n"
+    results       = (RUBOCOP_HEADING + defaults.merge(overrides || {}).to_yaml).rstrip
     # TODO: Merge `AllCops` more intelligently?
-    results       = (heading + defaults.merge(overrides || {}).to_yaml).rstrip
     write_file(".rubocop.yml", [results])
     sh "rubocop --display-cop-names"
   end
