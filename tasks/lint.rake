@@ -8,12 +8,23 @@ namespace :lint do
   task :rubocop do
     require "yaml"
     puts "Running Rubocop..."
-    defaults_file = File.expand_path("../../config/rubocop_rules.yml", __FILE__)
-    defaults      = YAML.load(File.read(defaults_file))
-    local_opts    = ".rubocop.local.yml"
-    overrides     = YAML.load(File.read(local_opts)) if File.exist?(local_opts)
-    results       = (RUBOCOP_HEADING + defaults.merge(overrides || {}).to_yaml).rstrip
-    # TODO: Merge `AllCops` more intelligently?
+    defaults_file           = File.expand_path("../../config/rubocop_rules.yml", __FILE__)
+    defaults                = YAML.load(File.read(defaults_file))
+    local_opts              = ".rubocop.local.yml"
+    overrides               = YAML.load(File.read(local_opts)) if File.exist?(local_opts)
+    overrides             ||= {}
+
+    # Be slightly intelligent about merging AllCops, but allow overriding things:
+    overrides["AllCops"]  ||= {}
+    o_allcops               = overrides["AllCops"]
+    d_allcops               = defaults["AllCops"] || {}
+    o_allcops["Exclude"] ||= d_allcops["Exclude"] if d_allcops.key?("Exclude")
+    o_allcops["Include"] ||= d_allcops["Include"] if d_allcops.key?("Include")
+
+    puts defaults["AllCops"].inspect
+    puts overrides["AllCops"].inspect
+
+    results = (RUBOCOP_HEADING + defaults.merge(overrides).to_yaml).rstrip
     write_file(".rubocop.yml", [results])
     sh "rubocop --display-cop-names"
   end
