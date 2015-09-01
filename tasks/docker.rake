@@ -3,8 +3,14 @@ namespace :docker do
     "Use FORCE_BUILD=1 to bypass layer caching."
   task :build do
     force_rebuild = (ENV["FORCE_BUILD"].to_i != 0) ? "--no-cache=true" : ""
-    sh %(docker build #{force_rebuild} -t #{Docker::Tools.container} .)
-    # sh %(docker tag -f #{Docker::Tools.container} #{Docker::Tools.latest})
+    if File.exist?("Dockerfile")
+      dest = "."
+    elsif File.exist?("context/Dockerfile")
+      dest = "context"
+    else
+      fail "Didn't find a Dockerfile in project root, or context/, cannot proceed."
+    end
+    sh %(docker build #{force_rebuild} -t #{Docker::Tools.container} #{dest})
   end
 
   desc "Tag a Docker container from this repo.  Uses VERSION or pom.xml to infer version,"\

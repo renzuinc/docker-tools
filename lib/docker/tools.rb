@@ -49,16 +49,22 @@ module Docker
 
     def self.container_version_info
       @container_version_info ||= begin
-        if File.exist?("VERSION")
-          File.read("VERSION").chomp.strip.split(/:/)
-        elsif File.exist?("pom.xml")
-          raw = Nokogiri.parse(File.read("pom.xml"))
-          [ raw.css("project > artifactId").first.text,
-            raw.css("project > version").first.text ]
-        else
-          fail "Couldn't find VERSION or pom.xml.  Giving up!"
-        end
+        data = simple_version_info || pom_version_info
+        fail "Couldn't find VERSION or pom.xml.  Giving up!" unless data
+        data
       end
+    end
+
+    def self.simple_version_info
+      return nil unless File.exist?("VERSION")
+      File.read("VERSION").chomp.strip.split(/:/)
+    end
+
+    def self.pom_version_info
+      return nil unless File.exist?("pom.xml")
+      raw = Nokogiri.parse(File.read("pom.xml"))
+      [raw.css("project > artifactId").first.text,
+       raw.css("project > version").first.text]
     end
   end
 end

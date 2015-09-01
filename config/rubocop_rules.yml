@@ -68,7 +68,7 @@ Style/LineEndConcatenation:
 
 # TODO: *sigh*  See: https://github.com/bbatsov/rubocop/issues/1020
 Style/RegexpLiteral:
-  MaxSlashes: 0
+  AllowInnerSlashes: false
 
 Style/RescueEnsureAlignment:
   Enabled: true
