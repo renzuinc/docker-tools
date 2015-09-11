@@ -11,6 +11,7 @@ require "docker/monkey_patches"
 require "docker/tools/version"
 require "docker/tools/rake"
 require "docker/tools/maven"
+require "docker/tools/elastic_beanstalk"
 
 include Docker::Tools::Rake
 
@@ -41,14 +42,8 @@ module Docker
     def self.full_name;         container_version_info.join(":"); end
     def self.latest;            [container, "latest"].join(":"); end
 
-    def self.set_version!(version)
-      if simple_version?
-        set_simple_version!(version)
-      elsif pom_version?
-        set_pom_version!(version)
-      else
-        fail "Couldn't find VERSION or pom.xml.  Giving up!"
-      end
+    def self.override_version=(val)
+      @container_version_info = [container_version_info.first, val]
     end
 
   protected
@@ -82,20 +77,6 @@ module Docker
     def self.pom_version_info
       return nil unless pom_version?
       Docker::Tools::Maven.extract_version!
-    end
-
-    def self.set_simple_version!(version)
-      File.open("VERSION", "w") do |fh|
-        fh.write([container, version].join(":") + "\n")
-      end
-    end
-
-    def self.set_pom_version!(version)
-      raw = Nokogiri.parse(File.read("pom.xml"))
-      raw.css("project > version").first.text = version
-      File.open("pom.xml", "w") do |fh|
-        fh.write(raw.to_xml)
-      end
     end
   end
 end

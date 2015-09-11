@@ -24,19 +24,6 @@ namespace :docker do
   desc "Push the recently tagged Docker container from this repo.  Uses VERSION or pom.xml to"\
     " infer version, and accepts FORCE_PUSH=1 to forcibly overwrite a tag on the registry."
   task :push do
-    force_push  = (ENV["FORCE_PUSH"].to_i != 0) ? "-f " : ""
-    remote_name = "#{Docker::Tools.registry}/#{Docker::Tools.full_name}"
-    internal_name = "#{Docker::Tools.internal_registry}/#{Docker::Tools.full_name}"
-    sh %(docker push #{force_push}#{remote_name})
-    if File.exist?("Dockerrun.aws.json")
-      puts "Updating Dockerrun.aws.json..."
-      raw = JSON.parse(File.read("Dockerrun.aws.json"))
-      raw["Image"] ||= {}
-      raw["Image"]["Name"] = internal_name
-      File.open("Dockerrun.aws.json", "w") do |fh|
-        fh.write(JSON.pretty_unparse(raw))
-        fh.write("\n")
-      end
-    end
+    sh %(docker push #{Docker::Tools.registry}/#{Docker::Tools.full_name})
   end
 end
