@@ -15,8 +15,6 @@ module Docker
       end
 
       def self.assets; @assets; end
-
-      # mvn --batch-mode release:update-versions -DdevelopmentVersion=1.2.0-SNAPSHOT
     end
   end
 end
