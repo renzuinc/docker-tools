@@ -2,13 +2,18 @@ if Docker::Tools::ElasticBeanstalk.in_use?
   namespace :ebs do
     desc "Create a bootstrap version, and push it into the secrets bucket."\
       "  Use this after creating the app in `cnc-renbot`, but before creating any environments."
-    task create_bootstrap: [:'mvn:clean', :'mvn:build', :'mvn:assemble', :'docker:build',
-                            :'mvn:release:update_versions', :'docker:build', :'docker:tag',
-                            :'docker:push', :'mvn:release:perform'] do
-      sh "zip -9 -r bootstrap.zip Dockerrun.aws.json .ebextensions/"
-      puts "WARNING: Placing bootstrap.zip in secrets bucket.  Do a `rake secrets:pull`"\
-        " in `cnc-renbot`."
-      sh "aws --region us-west-2 s3 cp bootstrap.zip s3://renzu-keyring/cecil-api/"
+    task create_bootstrap: [:'mvn:release'] do
+      fail "Must generate a release first!" unless File.exist?(".Dockerrun.aws.json")
+      rm_f "tmp/bootstrap" if Dir.exist?("tmp/bootstrap")
+      mkdir "tmp/bootstrap"
+      cp ".Dockerrun.aws.json", "tmp/bootstrap/"
+      cp_r ".ebextensions", "tmp/bootstrap/"
+      cd "tmp/bootstrap" do
+        sh "zip -9 -r bootstrap.zip Dockerrun.aws.json .ebextensions/"
+        puts "WARNING: Placing bootstrap.zip in secrets bucket.  Do a `rake secrets:pull`"\
+          " in `cnc-renbot`."
+        sh "aws --region us-west-2 s3 cp bootstrap.zip s3://renzu-keyring/cecil-api/"
+      end
       sh %q(
         aws elasticbeanstalk create-application-version \
           --region us-west-2 \
@@ -33,7 +38,8 @@ if Docker::Tools::ElasticBeanstalk.in_use?
         fh.write("\n")
       end
       sh "git add -- Dockerrun.aws.json"
-      sh "git commit --message AUGH"
+      sh "git commit --message 'Updating Dockerrun.aws.json'"
+      cp_f "Dockerrun.aws.json", ".Dockerrun.aws.json"
     end
 
     # desc "Deploy to EBS."
