@@ -2,7 +2,7 @@ if Docker::Tools::ElasticBeanstalk.in_use?
   namespace :ebs do
     desc "Create a bootstrap version, and push it into the secrets bucket."\
       "  Use this after creating the app in `cnc-renbot`, but before creating any environments."
-    task create_bootstrap: [:'mvn:release'] do
+    task :create_bootstrap do
       sh "zip -9 -r bootstrap.zip Dockerrun.aws.json .ebextensions/"
       puts "WARNING: Placing bootstrap.zip in secrets bucket.  Do a `rake secrets:pull`"\
         " in `cnc-renbot`."
