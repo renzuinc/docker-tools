@@ -7,14 +7,14 @@ if Docker::Tools::ElasticBeanstalk.in_use?
       puts "WARNING: Placing bootstrap.zip in secrets bucket.  Do a `rake secrets:pull`"\
         " in `cnc-renbot`."
       sh "aws --region us-west-2 s3 cp bootstrap.zip s3://renzu-keyring/cecil-api/"
-      sh %q(
+      sh %(
         aws elasticbeanstalk create-application-version \
           --region us-west-2 \
-          --application-name cecil-api \
+          --application-name #{Docker::Tools.container} \
           --version-label "bootstrap" \
           --description "Version used to bootstrap environments." \
           --auto-create-application \
-          --source-bundle S3Bucket="renzu-keyring",S3Key="cecil-api/bootstrap.zip"
+          --source-bundle S3Bucket="renzu-keyring",S3Key="#{Docker::Tools.container}/bootstrap.zip"
       )
     end
 
