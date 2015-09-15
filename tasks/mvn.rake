@@ -35,14 +35,26 @@ if Docker::Tools::Maven.in_use?
 
     desc "Run Maven release tasks, update Dockerrun.aws.json, and redo release tag."
     task release: [:clean] do
+      # Note that these tasks do NOT package/assemble the app -- and they
+      # operate by doing a `git clone` to a separate location.  So basically
+      # the tasks won't find the binaries it build without some nasty shuffling
+      # of files.  Instead, we treat it like a black box by just doing the build
+      # again from scratch.
       sh "mvn release:prepare release:perform"
       release_tag     = `git tag --list --points-at HEAD^1`.strip
       release_version = release_tag.split(%r{/}).last
-      puts "Releasing version: #{release_version}"
       Docker::Tools.override_version = release_version
-      task(:'docker:build').execute
-      task(:'docker:tag').execute
-      task(:'docker:push').execute
+      puts "Assembling and Releasing version: #{release_version}"
+      begin
+        sh "git checkout #{release_tag}"
+        %i(clean mvn:build mvn:assemble docker:build docker:tag docker:push).each do |subtask|
+          task(subtask).execute
+        end
+      ensure
+        # Try to return to the branch the user was on before we started screwing
+        # with their state.
+        sh "git checkout -"
+      end
     end
   end
 end
