@@ -41,6 +41,7 @@ module Docker
     def self.version;           container_version_info.last; end
     def self.full_name;         container_version_info.join(":"); end
     def self.latest;            [container, "latest"].join(":"); end
+    def self.region;            @region ||= ENV.fetch("AWS_REGION").downcase; end
 
     def self.override_version=(val)
       @container_version_info = [container_version_info.first, val]

@@ -6,7 +6,8 @@ if Docker::Tools::ElasticBeanstalk.in_use?
       sh "zip -9 -r bootstrap.zip Dockerrun.aws.json .ebextensions/"
       puts "WARNING: Placing bootstrap.zip in secrets bucket.  Do a `rake secrets:pull`"\
         " in `cnc-renbot`."
-      sh "aws --region us-west-2 s3 cp bootstrap.zip s3://renzu-keyring/#{Docker::Tools.container}/"
+      dest = "elasticbeanstalk-#{Docker::Tools.region}-796425841332/#{Docker::Tools.container}/"
+      sh "aws --region us-west-2 s3 cp bootstrap.zip s3://#{dest}"
       # Give it a couple seconds because eventual-consistency...
       sleep 5.0
       sh %(
