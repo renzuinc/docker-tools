@@ -7,12 +7,12 @@ if Docker::Tools::ElasticBeanstalk.in_use?
       puts "WARNING: Placing bootstrap.zip in secrets bucket.  Do a `rake secrets:pull`"\
         " in `cnc-renbot`."
       dest = "elasticbeanstalk-#{Docker::Tools.region}-796425841332/#{Docker::Tools.container}/"
-      sh "aws --region us-west-2 s3 cp bootstrap.zip s3://#{dest}"
+      sh "aws --region #{Docker::Tools.region} s3 cp bootstrap.zip s3://#{dest}"
       # Give it a couple seconds because eventual-consistency...
       sleep 5.0
       sh %(
         aws elasticbeanstalk create-application-version \
-          --region us-west-2 \
+          --region #{Docker::Tools.region} \
           --application-name #{Docker::Tools.container} \
           --version-label "bootstrap" \
           --description "Version used to bootstrap environments." \
