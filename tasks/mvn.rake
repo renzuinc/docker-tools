@@ -33,7 +33,7 @@ if Docker::Tools::Maven.in_use?
       cp "bin/launch", "context/local/bin/"
     end
 
-    desc "Run Maven release tasks, update Dockerrun.aws.json, and redo release tag."
+    desc "Run Maven release tasks, build Docker image, push it to registry."
     task release: [:clean] do
       # Note that these tasks do NOT package/assemble the app -- and they
       # operate by doing a `git clone` to a separate location.  So basically
