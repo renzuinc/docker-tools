@@ -33,13 +33,12 @@ if Docker::Tools::Maven.in_use?
       cp "bin/launch", "context/local/bin/"
     end
 
-    desc "Run Maven release tasks, build Docker image, push it to registry."
+    desc "Run Maven release tasks, producing a release-ready build."
     task release: [:clean] do
-      # Note that these tasks do NOT package/assemble the app -- and they
-      # operate by doing a `git clone` to a separate location.  So basically
-      # the tasks won't find the binaries it build without some nasty shuffling
-      # of files.  Instead, we treat it like a black box by just doing the build
-      # again from scratch.
+      # Note that these tasks do NOT package/assemble the app -- and they operate by doing a
+      # `git clone` to a separate location.  So basically the tasks won't find the binaries it
+      # build without some nasty shuffling of files.  Instead, we treat it like a black box by just
+      # doing the build again from scratch.
       sh "mvn release:prepare release:perform"
       release_tag     = `git tag --list --points-at HEAD^1`.strip
       release_version = release_tag.split(%r{/}).last
@@ -47,12 +46,11 @@ if Docker::Tools::Maven.in_use?
       puts "Assembling and Releasing version: #{release_version}"
       begin
         sh "git checkout #{release_tag}"
-        %i(clean mvn:build mvn:assemble docker:build docker:tag docker:push).each do |subtask|
+        %i(clean mvn:build mvn:assemble).each do |subtask|
           task(subtask).execute
         end
       ensure
-        # Try to return to the branch the user was on before we started screwing
-        # with their state.
+        # Try to return to the branch the user was on before we started screwing with their state.
         sh "git checkout -"
       end
     end
