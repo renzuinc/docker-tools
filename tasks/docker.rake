@@ -28,10 +28,15 @@ namespace :docker do
   end
 
   desc "Build Docker image for release, tag it, push it to registry.  Must be performed"\
-    " immediately after a release build!"
+    " immediately after a release build! OR use RELEASE_VERSION=<version>"\
+    " to overwrite tag to check out"
   task :release do
     release_tag     = `git tag --list --points-at HEAD^1`.strip
-    release_version = release_tag.split(%r{/}).last
+    release_version = release_tag.split(%r{/}).last || (ENV["RELEASE_VERSION"].strip if ENV["RELEASE_VERSION"])
+    if release_version.nil? && ENV["RELEASE_VERSION"].nil?
+      fail "Tag not found and RELEASE_VERSION is empty. Are you sure this is performed immediately"\
+      " after release build? \nIf not be sure to specify RELEASE_VERSION for tag to release from."
+    end
     Docker::Tools.override_version = release_version
     puts "Assembling and Releasing version: #{release_version}"
     begin
