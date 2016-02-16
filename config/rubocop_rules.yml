@@ -63,10 +63,6 @@ Style/EmptyLineBetweenDefs:
 Style/ExtraSpacing:
   AllowForAlignment: true
 
-Style/FormatString:
-  EnforcedStyle: 'String#%'
-  SupportedStyles: 'String#%'
-
 # Style/GuardClause:
 #   Enabled: false
 
