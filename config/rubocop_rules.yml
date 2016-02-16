@@ -88,6 +88,3 @@ Style/SingleLineMethods:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
-Style/TrailingCommaInLiteral:
-  EnforcedStyleForMultiline: comma
-  SupportedStyles: comma
