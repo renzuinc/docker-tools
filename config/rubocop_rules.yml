@@ -89,16 +89,6 @@ Style/RescueEnsureAlignment:
 Style/SingleLineMethods:
   Enabled: false
 
-Style/SpaceAroundOperators:
-  MultiSpaceAllowedForOperators:
-    - '='
-    - '=>'
-    - '||='
-    - '+='
-    - '-='
-    - '*='
-    - '/='
-
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
